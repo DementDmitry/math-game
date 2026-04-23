@@ -41,7 +41,7 @@
 
   .progress-wrap {
     width: 100%;
-    max-width: 480px;
+    max-width: 620px;
     margin-bottom: 12px;
   }
   .progress-label {
@@ -120,7 +120,7 @@
     padding: 36px 44px;
     text-align: center;
     width: 100%;
-    max-width: 480px;
+    max-width: 620px;
     position: relative;
     overflow: hidden;
   }
@@ -159,10 +159,13 @@
 
   .question {
     font-family: 'Fredoka One', cursive;
-    font-size: clamp(2.8rem, 9vw, 4.5rem);
+    font-size: clamp(2rem, 9vw, 4.5rem);
     color: #2d2d2d;
     margin: 6px 0 26px;
     line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .question.shake { animation: shake 0.4s ease; }
   @keyframes shake {

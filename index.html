@@ -648,7 +648,7 @@ function setMode(m) {
 }
 
 function resetGame() {
-  correct = 0; wrong = 0; streak = 0; winCount = 0; lives = 3; questionsAnswered = 0; totalCorrect = 0;
+  correct = 0; wrong = 0; streak = 0; winCount = 0; lives = 3; questionsAnswered = 0; totalCorrect = 0; usedQuestions = new Set();
   ['scoreCorrect','scoreWrong','winCount'].forEach(id => document.getElementById(id).textContent = 0);
   document.getElementById('progressFill').style.width = '0%';
   document.getElementById('streak').textContent = '';
@@ -660,26 +660,46 @@ function resetGame() {
   generateQuestion();
 }
 
+// Track used questions per game session
+let usedQuestions = new Set();
+
+function makeKey(a, b) {
+  // For commutative ops (plus, mult) normalize so min is first
+  return [Math.min(a,b), Math.max(a,b)].join('_');
+}
+
 function generateQuestion() {
   canAnswer = true;
   bonusMode = false;
   const lv = LEVELS[level];
-  let a, b, display;
+  let a, b, display, key;
+  let attempts = 0;
 
-  if (mode === 'plus') {
-    a = rand(0, lv.plusMax); b = rand(0, lv.plusMax - a);
-    answer = a + b; display = `${a} + ${b} = ?`;
-  } else if (mode === 'minus') {
-    a = rand(0, lv.plusMax); b = rand(0, a);
-    answer = a - b; display = `${a} − ${b} = ?`;
-  } else if (mode === 'mult') {
-    a = rand(1, lv.multA); b = rand(1, lv.multB);
-    answer = a * b; display = `${a} × ${b} = ?`;
-  } else {
-    b = rand(2, lv.divMax);
-    const q = rand(1, lv.divMax);
-    a = b * q; answer = q; display = `${a} ÷ ${b} = ?`;
-  }
+  do {
+    attempts++;
+    if (mode === 'plus') {
+      a = rand(0, lv.plusMax); b = rand(0, lv.plusMax - a);
+      answer = a + b; key = 'p_' + makeKey(a, b);
+      display = `${a} + ${b} = ?`;
+    } else if (mode === 'minus') {
+      a = rand(0, lv.plusMax); b = rand(0, a);
+      answer = a - b; key = 'm_' + a + '_' + b;
+      display = `${a} − ${b} = ?`;
+    } else if (mode === 'mult') {
+      a = rand(1, lv.multA); b = rand(1, lv.multB);
+      answer = a * b; key = 'x_' + makeKey(a, b);
+      display = `${a} × ${b} = ?`;
+    } else {
+      b = rand(2, lv.divMax);
+      const q = rand(1, lv.divMax);
+      a = b * q; answer = q; key = 'd_' + a + '_' + b;
+      display = `${a} ÷ ${b} = ?`;
+    }
+    // After 50 attempts give up (all combos used) and reset history
+    if (attempts > 50) { usedQuestions.clear(); break; }
+  } while (usedQuestions.has(key));
+
+  usedQuestions.add(key);
 
   document.getElementById('question').textContent = display;
   document.getElementById('question').classList.remove('shake');

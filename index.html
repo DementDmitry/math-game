@@ -112,6 +112,7 @@
   .mode-btn.plus  { background: var(--accent); }
   .mode-btn.minus { background: var(--primary); }
   .mode-btn.mult  { background: var(--purple); }
+  .mode-btn.div   { background: #ff9f43; }
 
   .game-card {
     background: var(--card);
@@ -286,6 +287,7 @@
   <button class="mode-btn plus active" onclick="setMode('plus')">➕ Плюс</button>
   <button class="mode-btn minus" onclick="setMode('minus')">➖ Минус</button>
   <button class="mode-btn mult" onclick="setMode('mult')">✖️ Умножение</button>
+  <button class="mode-btn div" onclick="setMode('div')">➗ Деление</button>
 </div>
 
 <div class="game-card">
@@ -320,9 +322,9 @@
   const OOPS   = ['Ой, не то 😅','Попробуй ещё! 💫','Почти! 🤔','Не сдавайся! 💪'];
   const COLORS = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f43','#54a0ff'];
   const LEVELS = {
-    1: { plusMax: 10,   multA: 3,  multB: 3  },
-    2: { plusMax: 100,  multA: 10, multB: 10 },
-    3: { plusMax: 1000, multA: 20, multB: 20 },
+    1: { plusMax: 10,   multA: 3,  multB: 3,  divMax: 5  },
+    2: { plusMax: 100,  multA: 10, multB: 10, divMax: 10 },
+    3: { plusMax: 1000, multA: 20, multB: 20, divMax: 20 },
   };
   const LV_NAMES = { 1: '⭐ Уровень 1', 2: '⭐⭐ Уровень 2', 3: '⭐⭐⭐ Уровень 3' };
 
@@ -338,7 +340,7 @@
   function setMode(m) {
     mode = m;
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.mode-btn.' + (m === 'plus' ? 'plus' : m === 'minus' ? 'minus' : 'mult')).classList.add('active');
+    document.querySelector('.mode-btn.' + (m === 'plus' ? 'plus' : m === 'minus' ? 'minus' : m === 'mult' ? 'mult' : 'div')).classList.add('active');
     // НЕ сбрасываем очки при смене режима
     generateQuestion();
   }
@@ -365,9 +367,17 @@
     } else if (mode === 'minus') {
       a = rand(0, lv.plusMax); b = rand(0, a);
       answer = a - b; display = `${a} − ${b} = ?`;
-    } else {
+    } else if (mode === 'mult') {
       a = rand(1, lv.multA); b = rand(1, lv.multB);
       answer = a * b; display = `${a} × ${b} = ?`;
+    } else {
+      // division: only whole results
+      const divMax = lv.divMax;
+      b = rand(2, divMax);
+      const quotient = rand(1, divMax);
+      a = b * quotient;
+      answer = quotient;
+      display = `${a} ÷ ${b} = ?`;
     }
 
     document.getElementById('question').textContent = display;

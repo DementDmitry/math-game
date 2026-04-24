@@ -260,6 +260,63 @@
   @keyframes fall {
     to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
+
+  .hearts-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 2rem;
+  }
+  .heart {
+    transition: transform 0.3s;
+    display: inline-block;
+  }
+  .heart.lost {
+    filter: grayscale(1) opacity(0.3);
+    transform: scale(0.8);
+  }
+  .heart.shake-heart { animation: heartShake 0.4s ease; }
+  @keyframes heartShake {
+    0%,100% { transform: scale(1); }
+    30% { transform: scale(1.4) rotate(-10deg); }
+    60% { transform: scale(0.8) rotate(10deg); }
+  }
+
+  /* GAME OVER OVERLAY */
+  .gameover-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .gameover-overlay.show { display: flex; }
+  .gameover-box {
+    background: white;
+    border-radius: 32px;
+    padding: 50px 60px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .gameover-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
+  .gameover-title { font-family: 'Fredoka One', cursive; font-size: 2.5rem; color: var(--primary); margin-bottom: 8px; }
+  .gameover-sub { font-size: 1.1rem; color: #888; margin-bottom: 24px; }
+  .gameover-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 50px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #c0392b;
+    transition: transform 0.1s;
+  }
+  .gameover-btn:hover { transform: translateY(-3px); }
   footer { margin-top: 24px; color: #ccc; font-size: 0.8rem; }
 </style>
 </head>
@@ -295,6 +352,7 @@
     <div class="score-info">✅ <span id="scoreCorrect">0</span> &nbsp; ❌ <span id="scoreWrong">0</span></div>
     <button class="start-btn" onclick="resetGame()">🔄 Старт</button>
   </div>
+  <div class="hearts-row" id="heartsRow">❤️❤️❤️</div>
   <div class="question" id="question"></div>
   <div class="answers" id="answers"></div>
   <div class="feedback" id="feedback"></div>
@@ -310,12 +368,21 @@
   </div>
 </div>
 
+
+<div class="gameover-overlay" id="gameoverOverlay">
+  <div class="gameover-box">
+    <span class="gameover-emoji">💔</span>
+    <div class="gameover-title">Не получилось...</div>
+    <div class="gameover-sub" id="gameoverSub">Правильных ответов: 0</div>
+    <button class="gameover-btn" onclick="closeGameover()">🔄 Попробовать снова!</button>
+  </div>
+</div>
 <div class="confetti-wrap" id="confettiWrap"></div>
 <footer>Сделано с ❤️ для маленьких математиков</footer>
 
 <script>
   let mode = 'plus', level = 1;
-  let correct = 0, wrong = 0, streak = 0, winCount = 0;
+  let correct = 0, wrong = 0, streak = 0, winCount = 0, lives = 3;
   let answer = 0, canAnswer = true;
 
   const PRAISE = ['Молодец! 🎉','Супер! 🌟','Отлично! 🚀','Умница! 💪','Класс! 🎊','Ура! 🥳'];
@@ -329,6 +396,17 @@
   const LV_NAMES = { 1: '⭐ Уровень 1', 2: '⭐⭐ Уровень 2', 3: '⭐⭐⭐ Уровень 3' };
 
   function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  function renderHearts() {
+    const row = document.getElementById('heartsRow');
+    row.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const h = document.createElement('span');
+      h.className = 'heart' + (i >= lives ? ' lost' : '');
+      h.textContent = i >= lives ? '🖤' : '❤️';
+      row.appendChild(h);
+    }
+  }
 
   function setLevel(n) {
     level = n;
@@ -346,13 +424,14 @@
   }
 
   function resetGame() {
-    correct = 0; wrong = 0; streak = 0; winCount = 0;
+    correct = 0; wrong = 0; streak = 0; winCount = 0; lives = 3;
     document.getElementById('scoreCorrect').textContent = 0;
     document.getElementById('scoreWrong').textContent = 0;
     document.getElementById('winCount').textContent = 0;
     document.getElementById('progressFill').style.width = '0%';
     document.getElementById('streak').textContent = '';
     document.getElementById('streak').className = 'streak';
+    renderHearts();
     generateQuestion();
   }
 
@@ -422,18 +501,26 @@
       if (streak % 5 === 0) launchConfetti(40);
       setTimeout(generateQuestion, 800);
     } else {
-      wrong++; streak = 0;
+      wrong++; streak = 0; lives--;
       btn.classList.add('wrong');
       document.getElementById('scoreWrong').textContent = wrong;
       document.getElementById('question').classList.add('shake');
       showFeedback(OOPS[Math.floor(Math.random() * OOPS.length)], 'bad');
       updateStreak();
+      renderHearts();
+      // shake the last lost heart
+      const hearts = document.querySelectorAll('.heart');
+      if (hearts[lives]) hearts[lives].classList.add('shake-heart');
       setTimeout(() => {
         document.querySelectorAll('.ans-btn').forEach(b => {
           if (Number(b.textContent) === answer) b.classList.add('correct');
         });
       }, 350);
-      setTimeout(generateQuestion, 1300);
+      if (lives <= 0) {
+        setTimeout(showGameover, 1300);
+      } else {
+        setTimeout(generateQuestion, 1300);
+      }
     }
   }
 
@@ -456,6 +543,16 @@
 
   function closeWin() {
     document.getElementById('winOverlay').classList.remove('show');
+    resetGame();
+  }
+
+  function showGameover() {
+    document.getElementById('gameoverSub').textContent = `Правильных ответов: ${correct} 🌟`;
+    document.getElementById('gameoverOverlay').classList.add('show');
+  }
+
+  function closeGameover() {
+    document.getElementById('gameoverOverlay').classList.remove('show');
     resetGame();
   }
 

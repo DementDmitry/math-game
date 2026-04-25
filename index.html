@@ -28,6 +28,7 @@ body {
   overflow-x: hidden;
   position: relative;
 }
+body.modal-open { overflow: hidden; }
 
 /* ANIMATED BACKGROUND */
 .bg-canvas {
@@ -266,15 +267,17 @@ h1 {
 
 /* OVERLAYS */
 .overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.65); z-index: 9999;
-  align-items: center; justify-content: center;
+  display: none;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  min-height: 100%;
+  background: rgba(0,0,0,0.72);
+  z-index: 9999;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
 }
 .overlay.show { display: flex; }
-/* iframe fallback */
-@supports not (position: fixed) {
-  .overlay { position: absolute; }
-}
 .overlay-box {
   background: white; border-radius: 32px;
   padding: 40px 50px; text-align: center;
@@ -942,10 +945,12 @@ function showWin() {
   saveRecord();
   document.getElementById('winSub').textContent = LV_NAMES[level] + ' пройден! 10 правильных ответов! 🎉';
   document.getElementById('winOverlay').classList.add('show');
+  document.body.classList.add('modal-open');
   launchConfetti(120);
 }
 function closeWin() {
   document.getElementById('winOverlay').classList.remove('show');
+  document.body.classList.remove('modal-open');
   resetGame();
 }
 
@@ -953,9 +958,11 @@ function showGameover() {
   saveRecord();
   document.getElementById('gameoverSub').textContent = `Правильных ответов: ${correct} 🌟`;
   document.getElementById('gameoverOverlay').classList.add('show');
+  document.body.classList.add('modal-open');
 }
 function closeGameover() {
   document.getElementById('gameoverOverlay').classList.remove('show');
+  document.body.classList.remove('modal-open');
   resetGame();
 }
 
@@ -984,6 +991,7 @@ function openRecords() {
       </div>`).join('');
   }
   document.getElementById('recordsOverlay').classList.add('show');
+  document.body.classList.add('modal-open');
 }
 
 // ==================== SHOP ====================
@@ -1121,6 +1129,7 @@ function openShop() {
   document.getElementById('shopFrames').style.display = 'none';
   updateShopMain();
   document.getElementById('shopOverlay').classList.add('show');
+  document.body.classList.add('modal-open');
 }
 
 function buyOrSelect(id) {
@@ -1151,6 +1160,7 @@ function buyOrSelect(id) {
 
 function closeOverlay(id) {
   document.getElementById(id).classList.remove('show');
+  document.body.classList.remove('modal-open');
 }
 
 // ==================== CONFETTI ====================

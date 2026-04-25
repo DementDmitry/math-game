@@ -294,14 +294,13 @@ h1 {
 /* OVERLAYS */
 .overlay {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  min-height: 100%;
   background: rgba(0,0,0,0.72);
   z-index: 9999;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding-top: 40px;
+  overflow-y: auto;
 }
 .overlay.show { display: flex; }
 .overlay-box {
@@ -309,7 +308,7 @@ h1 {
   padding: 40px 50px; text-align: center;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;
+  max-width: 500px; width: 90%;
 }
 @keyframes popIn {
   from{transform:scale(0.5) rotate(-5deg);opacity:0}
@@ -488,7 +487,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
 
 <!-- SHOP OVERLAY -->
 <div class="overlay" id="shopOverlay">
-  <div class="overlay-box" style="max-width:860px;width:95vw;max-height:90vh;padding:28px 32px;position:relative;">
+  <div class="overlay-box" style="max-width:860px;width:95vw;padding:28px 32px;position:relative;margin:20px auto;">
     <button onclick="closeOverlay('shopOverlay')" style="position:absolute;top:14px;left:14px;font-size:1.3rem;width:36px;height:36px;border:none;border-radius:50%;background:#f0f0f0;cursor:pointer;color:#666;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;">✕</button>
     <span class="overlay-emoji">🛍️</span>
     <div class="overlay-title" style="color:var(--purple)">Магазин</div>

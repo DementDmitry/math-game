@@ -390,6 +390,29 @@ h1 {
   font-weight: 700;
   margin-top: 4px;
 }
+@keyframes shopShake {
+  0%,100% { transform: translateX(0) translateY(-4px); }
+  20% { transform: translateX(-8px) translateY(-4px); }
+  40% { transform: translateX(8px) translateY(-4px); }
+  60% { transform: translateX(-6px) translateY(-4px); }
+  80% { transform: translateX(6px) translateY(-4px); }
+}
+.shop-item.no-money {
+  border-color: #ff4444 !important;
+  background: #fff0f0 !important;
+  box-shadow: 0 6px 0 #ff9999 !important;
+  animation: shopShake 0.4s ease !important;
+}
+@keyframes coinShake {
+  0%,100% { transform: translateX(0); color: #ff9f43; }
+  25% { transform: translateX(-4px); color: #ff3333; }
+  75% { transform: translateX(4px); color: #ff3333; }
+}
+.shop-item-price.no-money {
+  color: #ff3333 !important;
+  animation: coinShake 0.4s ease !important;
+}
+
 
 /* COIN POPUP */
 .coin-pop {
@@ -1062,7 +1085,24 @@ function buyOrSelectFrame(id) {
       playSound('win');
       renderShopGrid();
     } else {
-      alert(`Нужно ещё ${frame.price - coins} монет! 🪙`);
+      const items = document.querySelectorAll('#shopGrid .shop-item');
+      items.forEach(el => {
+        const nameEl = el.querySelector('.shop-item-name');
+        if (nameEl && nameEl.textContent === frame.name) {
+          el.classList.add('no-money');
+          const priceEl = el.querySelector('.shop-item-price');
+          if (priceEl) priceEl.classList.add('no-money');
+          setTimeout(() => {
+            el.classList.remove('no-money');
+            if (priceEl) priceEl.classList.remove('no-money');
+          }, 600);
+        }
+      });
+      const coinEl = document.getElementById('shopCoins');
+      if (coinEl) {
+        coinEl.style.color = '#ff3333';
+        setTimeout(() => coinEl.style.color = '', 600);
+      }
     }
   }
 }
@@ -1142,7 +1182,25 @@ function buyOrSelect(id) {
       playSound('win');
       renderShopGrid();
     } else {
-      alert(`Нужно ещё ${pet.price - coins} монет! 🪙`);
+      // Find the clicked item and shake it red
+      const items = document.querySelectorAll('#shopGrid .shop-item');
+      items.forEach(el => {
+        const nameEl = el.querySelector('.shop-item-name');
+        if (nameEl && nameEl.textContent === pet.name) {
+          el.classList.add('no-money');
+          el.querySelector('.shop-item-price').classList.add('no-money');
+          setTimeout(() => {
+            el.classList.remove('no-money');
+            el.querySelector('.shop-item-price').classList.remove('no-money');
+          }, 600);
+        }
+      });
+      // Also shake coin display
+      const coinEl = document.getElementById('shopCoins');
+      if (coinEl) {
+        coinEl.style.color = '#ff3333';
+        setTimeout(() => coinEl.style.color = '', 600);
+      }
     }
   }
 }

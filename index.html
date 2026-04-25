@@ -450,6 +450,19 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   .pet-wrap { flex-direction: row; min-width: unset; }
   .pet { font-size: 3.5rem; }
 }
+
+.pet-frame { display:inline-block; border-radius:16px; padding:6px; transition:all 0.3s; }
+.pet-frame.frame-gold { outline:5px solid #FFD700; outline-offset:3px; border-radius:16px; box-shadow:0 0 20px #FFD700; animation:fgold 1.5s ease-in-out infinite alternate; }
+@keyframes fgold { from{box-shadow:0 0 10px #FFD700;} to{box-shadow:0 0 30px #FFD700, 0 0 50px #FFA500;} }
+.pet-frame.frame-rainbow { outline:5px solid #ff6b6b; outline-offset:3px; border-radius:16px; animation:frainbow 1s linear infinite; }
+@keyframes frainbow { 0%{outline-color:#ff6b6b;box-shadow:0 0 15px #ff6b6b;} 20%{outline-color:#ffd93d;box-shadow:0 0 15px #ffd93d;} 40%{outline-color:#6bcb77;box-shadow:0 0 15px #6bcb77;} 60%{outline-color:#4d96ff;box-shadow:0 0 15px #4d96ff;} 80%{outline-color:#c77dff;box-shadow:0 0 15px #c77dff;} 100%{outline-color:#ff6b6b;box-shadow:0 0 15px #ff6b6b;} }
+.pet-frame.frame-fire { outline:5px solid #FF4500; outline-offset:3px; border-radius:16px; animation:ffire 0.5s linear infinite; }
+@keyframes ffire { 0%{outline-color:#FF4500;box-shadow:0 0 20px #FF4500;} 50%{outline-color:#FFD700;box-shadow:0 0 30px #FF8C00;} 100%{outline-color:#FF4500;box-shadow:0 0 20px #FF4500;} }
+.pet-frame.frame-ice { outline:5px solid #87CEEB; outline-offset:3px; border-radius:16px; animation:fice 2s ease-in-out infinite alternate; }
+@keyframes fice { from{box-shadow:0 0 10px #87CEEB;outline-color:#A8D8EA;} to{box-shadow:0 0 25px #87CEEB,0 0 40px rgba(135,206,235,0.5);outline-color:#E0F4FF;} }
+.pet-frame.frame-star { outline:5px solid #FFD700; outline-offset:3px; border-radius:16px; animation:fstar 3s linear infinite; }
+@keyframes fstar { 0%{outline-color:#FFD700;box-shadow:0 0 15px #FFD700;filter:hue-rotate(0deg);} 100%{outline-color:#FFD700;box-shadow:0 0 15px #FFD700;filter:hue-rotate(360deg);} }
+
 </style>
 </head>
 <body>

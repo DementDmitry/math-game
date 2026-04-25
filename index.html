@@ -824,17 +824,22 @@ function generateQuestion() {
   let a, b, display, key;
   let attempts = 0;
 
+  // Declare actualMode BEFORE the loop
+  const actualMode = mode === 'rnd'
+    ? ['plus','minus','mult','div','cmp'][rand(0,4)]
+    : mode;
+
   do {
     attempts++;
-    if (mode === 'plus') {
+    if (actualMode === 'plus') {
       a = rand(0, lv.plusMax); b = rand(0, lv.plusMax - a);
       answer = a + b; key = 'p_' + makeKey(a, b);
       display = `${a} + ${b} = ?`;
-    } else if (mode === 'minus') {
+    } else if (actualMode === 'minus') {
       a = rand(0, lv.plusMax); b = rand(0, a);
       answer = a - b; key = 'm_' + a + '_' + b;
       display = `${a} − ${b} = ?`;
-    } else if (mode === 'mult') {
+    } else if (actualMode === 'mult') {
       a = rand(1, lv.multA); b = rand(1, lv.multB);
       answer = a * b; key = 'x_' + makeKey(a, b);
       display = `${a} × ${b} = ?`;
@@ -855,11 +860,6 @@ function generateQuestion() {
 
   const container = document.getElementById('answers');
   container.innerHTML = '';
-
-  // Random mode picks a different mode each question
-  const actualMode = mode === 'rnd'
-    ? ['plus','minus','mult','div','cmp'][rand(0,4)]
-    : mode;
 
   if (actualMode === 'cmp') {
     // Show only 3 big buttons: < = >

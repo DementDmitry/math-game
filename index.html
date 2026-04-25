@@ -464,6 +464,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   <button class="icon-btn shop" onclick="openShop()">🛍️ Магазин</button>
   <button class="icon-btn record" onclick="openRecords()">🏆 Рекорды</button>
   <button class="icon-btn" onclick="resetGame()" style="background:var(--secondary);color:#333;box-shadow:0 4px 0 #e6c200;">🔄</button>
+  <button class="icon-btn" onclick="addCoins(2000, window.innerWidth/2, 60)" style="background:#a29bfe;box-shadow:0 4px 0 #6c5ce7;" title="+2000 монет">🧪</button>
 </div>
 
 <div class="progress-wrap">
@@ -487,9 +488,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
 <div class="game-area">
   <!-- PET -->
   <div class="pet-wrap">
-    <div class="pet-frame" id="petFrame">
-    <img class="pet" id="pet" onclick="petClick()" src="" alt="pet" style="width:80px;height:80px;image-rendering:pixelated;cursor:pointer;display:block;">
-  </div>
+    <div class="pet-frame" id="petFrame"><img class="pet" id="pet" onclick="petClick()" src="" alt="pet" style="width:80px;height:80px;image-rendering:pixelated;cursor:pointer;display:block;"></div>
 
   </div>
 
@@ -580,7 +579,7 @@ let mode = 'plus', level = 1;
 let correct = 0, wrong = 0, streak = 0, winCount = 0, lives = 3;
 let answer = 0, canAnswer = true;
 let totalCorrect = 0; // for records
-let coins = parseInt(localStorage.getItem('mathCoins') || '0');
+let coins = parseInt(localStorage.getItem('mathCoins') || '2000');
 let ownedPets = JSON.parse(localStorage.getItem('mathOwnedPets') || '["cat"]');
 let activePet = localStorage.getItem('mathActivePet') || 'cat';
 let records = JSON.parse(localStorage.getItem('mathRecords') || '[]');

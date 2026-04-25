@@ -461,6 +461,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   <div class="coin-display">🪙 <span id="coinCount">0</span></div>
   <button class="icon-btn shop" onclick="openShop()">🛍️ Магазин</button>
   <button class="icon-btn record" onclick="openRecords()">🏆 Рекорды</button>
+  <button class="icon-btn" onclick="resetGame()" style="background:var(--accent);">🔄</button>
 </div>
 
 <div class="progress-wrap">
@@ -494,7 +495,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   <div class="game-card" id="gameCard">
     <div class="top-row">
       <div class="score-info">✅ <span id="scoreCorrect">0</span> &nbsp; ❌ <span id="scoreWrong">0</span></div>
-      <button class="start-btn" onclick="resetGame()">🔄 Старт</button>
+
     </div>
     <div class="hearts-row" id="heartsRow"></div>
     <div class="question" id="question"></div>

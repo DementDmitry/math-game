@@ -142,6 +142,7 @@ h1 {
   gap: 10px;
   align-items: center;
   justify-content: center;
+  width: 70px;
   flex-shrink: 0;
 }
 .mode-col .mode-btn {
@@ -163,15 +164,15 @@ h1 {
   flex-direction: row;
   gap: 16px;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  max-width: 900px;
   z-index: 1;
 }
 
 /* PET */
 .pet-wrap {
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px; min-width: 90px;
+  gap: 8px; width: 90px; flex-shrink: 0;
 }
 .pet {
   font-size: 5rem;
@@ -192,7 +193,7 @@ h1 {
 .game-card {
   background: var(--card); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 28px 36px;
-  text-align: center; flex: 1; position: relative; overflow: hidden;
+  text-align: center; width: 480px; flex-shrink: 0; position: relative; overflow: hidden;
 }
 .game-card::before {
   content: '';

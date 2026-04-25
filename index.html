@@ -688,10 +688,7 @@ function applyFrame() {
   frame.className = 'pet-frame' + (activeFrame !== 'none' ? ' frame-' + activeFrame : '');
 }
 
-function petSay(type) {
-  const p = getPet();
-  const arr = p.speeches[type] || p.speeches.idle;
-}
+function petSay(type) { /* no speeches */ }
 
 function petAnim(type) {
   const el = document.getElementById('pet');
@@ -704,7 +701,7 @@ function petAnim(type) {
 
 function petClick() {
   petAnim('bounce');
-  petSay('idle');
+  
 }
 
 // ==================== HEARTS ====================
@@ -763,7 +760,7 @@ function resetGame() {
   document.getElementById('bonusCard').classList.remove('show');
   document.getElementById('gameCard').style.display = '';
   renderHearts();
-  petSay('idle');
+  
   generateQuestion();
 }
 
@@ -845,7 +842,7 @@ function checkAnswer(val, btn) {
     document.getElementById('winCount').textContent = winCount;
     document.getElementById('progressFill').style.width = Math.min(winCount/10*100,100) + '%';
     playSound('correct');
-    petAnim('happy'); petSay('happy');
+    petAnim('happy'); 
 
     // coins: +1, +2 on streak
     const coinGain = streak >= 5 ? 2 : 1;
@@ -872,7 +869,7 @@ function checkAnswer(val, btn) {
     document.getElementById('scoreWrong').textContent = wrong;
     document.getElementById('question').classList.add('shake');
     playSound('wrong');
-    petAnim('sad'); petSay('sad');
+    petAnim('sad'); 
 
     const OOPS = ['Ой, не то 😅','Попробуй ещё! 💫','Почти! 🤔','Не сдавайся! 💪'];
     showFeedback(OOPS[Math.floor(Math.random()*OOPS.length)], 'bad');
@@ -1167,7 +1164,7 @@ function buyOrSelect(id) {
   if (ownedPets.includes(id)) {
     activePet = id;
     localStorage.setItem('mathActivePet', id);
-    renderPet(); petSay('idle');
+    renderPet(); 
     openShop(); // refresh
   } else {
     if (coins >= pet.price) {
@@ -1178,7 +1175,7 @@ function buyOrSelect(id) {
       localStorage.setItem('mathOwnedPets', JSON.stringify(ownedPets));
       activePet = id;
       localStorage.setItem('mathActivePet', id);
-      renderPet(); petSay('happy');
+      renderPet(); 
       playSound('win');
       renderShopPets2(); updateShopMain();
     } else {

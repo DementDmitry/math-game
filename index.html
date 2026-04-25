@@ -488,41 +488,16 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
 
 <!-- SHOP OVERLAY -->
 <div class="overlay" id="shopOverlay">
-  <div class="shop-modal">
-    <div class="shop-header">
-      <div class="shop-title">🛍️ Магазин</div>
-      <div class="shop-coins-bar">🪙 <span id="shopCoins">0</span> монет</div>
-      <button class="shop-close-btn" onclick="closeOverlay('shopOverlay')">✕</button>
+  <div class="overlay-box" style="max-width:560px;width:92vw;max-height:85vh;overflow-y:auto;">
+    <span class="overlay-emoji">🛍️</span>
+    <div class="overlay-title" style="color:var(--purple)">Магазин</div>
+    <div class="overlay-sub">🪙 У тебя: <span id="shopCoins">0</span> монет</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px;">
+      <button class="shop-tab active" id="tabPets" onclick="switchTab('pets')">🐾 Питомцы</button>
+      <button class="shop-tab" id="tabFrames" onclick="switchTab('frames')">🖼️ Рамки</button>
     </div>
-    <!-- MAIN SCREEN -->
-    <div id="shopMain">
-      <div class="shop-main-grid">
-        <div class="shop-main-card" onclick="openShopSection('pets')">
-          <div class="shop-main-preview" id="shopPetPreview"></div>
-          <div class="shop-main-label">🐾 Питомец</div>
-          <div class="shop-main-name" id="shopPetName">Мурзик</div>
-          <div class="shop-main-change">Сменить →</div>
-        </div>
-        <div class="shop-main-card" onclick="openShopSection('frames')">
-          <div class="shop-main-preview frame-preview-big" id="shopFramePreview">🖼️</div>
-          <div class="shop-main-label">🖼️ Рамка</div>
-          <div class="shop-main-name" id="shopFrameName">Без рамки</div>
-          <div class="shop-main-change">Сменить →</div>
-        </div>
-      </div>
-    </div>
-    <!-- PETS SECTION -->
-    <div id="shopPets" style="display:none">
-      <button class="shop-back-btn" onclick="backToShopMain()">← Назад</button>
-      <div class="shop-section-title">🐾 Выбери питомца</div>
-      <div class="shop-big-grid" id="shopPetsGrid"></div>
-    </div>
-    <!-- FRAMES SECTION -->
-    <div id="shopFrames" style="display:none">
-      <button class="shop-back-btn" onclick="backToShopMain()">← Назад</button>
-      <div class="shop-section-title">🖼️ Выбери рамку</div>
-      <div class="shop-big-grid" id="shopFramesGrid"></div>
-    </div>
+    <div id="shopGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;"></div>
+    <button class="overlay-btn purple" onclick="closeOverlay('shopOverlay')">Закрыть</button>
   </div>
 </div>
 
@@ -1021,45 +996,8 @@ function openRecords() {
 }
 
 // ==================== SHOP ====================
-function showShopTab(tab, btn) {
-  document.querySelectorAll('.shop-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const grid = document.getElementById('shopGrid');
-  if (tab === 'pets') {
-    renderShopPets(grid);
-  } else {
-    renderShopFrames(grid);
-  }
-}
 
-function renderShopPets(grid) {
-  grid.innerHTML = PETS.map(p => {
-    const owned = ownedPets.includes(p.id);
-    const active = activePet === p.id;
-    return `<div class="shop-item ${owned?'owned':''} ${active?'active-pet':''}" onclick="buyOrSelect('${p.id}')">
-      <img src="${p.img}" style="width:56px;height:56px;image-rendering:pixelated;display:block;margin:0 auto 4px;">
-      <div class="shop-item-name">${p.name}</div>
-      <div class="shop-item-price">${active ? '✓ Выбран' : owned ? '✓ Есть' : '🪙 '+p.price}</div>
-    </div>`;
-  }).join('');
-  grid.style.maxHeight = '55vh';
-  grid.style.overflowY = 'auto';
-}
 
-function renderShopFrames(grid) {
-  const FRAME_ICONS = { none:'⬜', gold:'🌟', rainbow:'🌈', fire:'🔥', ice:'❄️', star:'⭐' };
-  grid.innerHTML = FRAMES.map(f => {
-    const owned = ownedFrames.includes(f.id);
-    const active = activeFrame === f.id;
-    return `<div class="shop-item ${owned?'owned':''} ${active?'active-pet':''}" onclick="buyOrSelectFrame('${f.id}')">
-      <div class="frame-preview frame-${f.id}">${FRAME_ICONS[f.id]}</div>
-      <div class="shop-item-name">${f.name}</div>
-      <div class="shop-item-price">${active ? '✓ Одета' : owned ? '✓ Есть' : '🪙 '+f.price}</div>
-    </div>`;
-  }).join('');
-  grid.style.maxHeight = '55vh';
-  grid.style.overflowY = 'auto';
-}
 
 function buyOrSelectFrame(id) {
   const frame = FRAMES.find(f => f.id === id);
@@ -1068,7 +1006,7 @@ function buyOrSelectFrame(id) {
     activeFrame = id;
     localStorage.setItem('mathActiveFrame', id);
     applyFrame();
-    renderShopFrames2(); updateShopMain();
+    renderShopGrid();
   } else {
     if (coins >= frame.price) {
       coins -= frame.price;
@@ -1080,80 +1018,61 @@ function buyOrSelectFrame(id) {
       localStorage.setItem('mathActiveFrame', id);
       applyFrame();
       playSound('win');
-      renderShopFrames2(); updateShopMain();
+      renderShopGrid();
     } else {
       alert(`Нужно ещё ${frame.price - coins} монет! 🪙`);
     }
   }
 }
 
-function openShopSection(section) {
-  document.getElementById('shopMain').style.display = 'none';
-  document.getElementById('shopPets').style.display = 'none';
-  document.getElementById('shopFrames').style.display = 'none';
-  if (section === 'pets') {
-    document.getElementById('shopPets').style.display = 'block';
-    renderShopPets2();
+
+
+
+
+
+
+
+let currentShopTab = 'pets';
+
+function switchTab(tab) {
+  currentShopTab = tab;
+  document.getElementById('tabPets').classList.toggle('active', tab === 'pets');
+  document.getElementById('tabFrames').classList.toggle('active', tab === 'frames');
+  renderShopGrid();
+}
+
+function renderShopGrid() {
+  const grid = document.getElementById('shopGrid');
+  const FRAME_ICONS = { none:'⬜', gold:'🌟', rainbow:'🌈', fire:'🔥', ice:'❄️', star:'⭐' };
+  if (currentShopTab === 'pets') {
+    grid.innerHTML = PETS.map(p => {
+      const owned = ownedPets.includes(p.id);
+      const active = activePet === p.id;
+      return `<div class="shop-item ${owned?'owned':''} ${active?'selected':''}" onclick="buyOrSelect('${p.id}')">
+        <img src="${p.img}" style="width:60px;height:60px;image-rendering:pixelated;display:block;margin:0 auto;">
+        <div class="shop-item-name">${p.name}</div>
+        <div class="shop-item-price">${active?'✓ Выбран':owned?'✓ Есть':'🪙 '+p.price}</div>
+      </div>`;
+    }).join('');
   } else {
-    document.getElementById('shopFrames').style.display = 'block';
-    renderShopFrames2();
+    grid.innerHTML = FRAMES.map(f => {
+      const owned = ownedFrames.includes(f.id);
+      const active = activeFrame === f.id;
+      return `<div class="shop-item ${owned?'owned':''} ${active?'selected':''}" onclick="buyOrSelectFrame('${f.id}')">
+        <div style="width:60px;height:60px;margin:0 auto;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:2rem;" class="frame-preview frame-${f.id}">${FRAME_ICONS[f.id]}</div>
+        <div class="shop-item-name">${f.name}</div>
+        <div class="shop-item-price">${active?'✓ Одета':owned?'✓ Есть':'🪙 '+f.price}</div>
+      </div>`;
+    }).join('');
   }
 }
 
-function backToShopMain() {
-  document.getElementById('shopPets').style.display = 'none';
-  document.getElementById('shopFrames').style.display = 'none';
-  document.getElementById('shopMain').style.display = 'block';
-  updateShopMain();
-}
-
-function updateShopMain() {
-  const p = getPet();
-  const preview = document.getElementById('shopPetPreview');
-  preview.innerHTML = `<img src="${p.img}" alt="${p.name}">`;
-  document.getElementById('shopPetName').textContent = p.name;
-  // frame
-  const FRAME_ICONS = { none:'⬜', gold:'🌟', rainbow:'🌈', fire:'🔥', ice:'❄️', star:'⭐' };
-  const FRAME_NAMES = { none:'Без рамки', gold:'Золотая', rainbow:'Радужная', fire:'Огненная', ice:'Ледяная', star:'Звёздная' };
-  const fp = document.getElementById('shopFramePreview');
-  fp.textContent = FRAME_ICONS[activeFrame] || '⬜';
-  fp.className = 'shop-main-preview frame-preview-big' + (activeFrame !== 'none' ? ' frame-' + activeFrame : '');
-  document.getElementById('shopFrameName').textContent = FRAME_NAMES[activeFrame] || 'Без рамки';
-}
-
-function renderShopPets2() {
-  const grid = document.getElementById('shopPetsGrid');
-  grid.innerHTML = PETS.map(p => {
-    const owned = ownedPets.includes(p.id);
-    const active = activePet === p.id;
-    return `<div class="shop-item2 ${owned?'owned':''} ${active?'selected':''}" onclick="buyOrSelect('${p.id}')">
-      <img src="${p.img}" alt="${p.name}">
-      <div class="shop-item2-name">${p.name}</div>
-      <div class="shop-item2-price">${active ? '✓ Выбран' : owned ? '✓ Есть' : '🪙 '+p.price}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderShopFrames2() {
-  const FRAME_ICONS = { none:'⬜', gold:'🌟', rainbow:'🌈', fire:'🔥', ice:'❄️', star:'⭐' };
-  const grid = document.getElementById('shopFramesGrid');
-  grid.innerHTML = FRAMES.map(f => {
-    const owned = ownedFrames.includes(f.id);
-    const active = activeFrame === f.id;
-    return `<div class="shop-item2 ${owned?'owned':''} ${active?'selected':''}" onclick="buyOrSelectFrame('${f.id}')">
-      <div class="frame-preview frame-${f.id}" style="width:56px;height:56px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;border-radius:10px;">${FRAME_ICONS[f.id]}</div>
-      <div class="shop-item2-name">${f.name}</div>
-      <div class="shop-item2-price">${active ? '✓ Одета' : owned ? '✓ Есть' : '🪙 '+f.price}</div>
-    </div>`;
-  }).join('');
-}
-
 function openShop() {
+  currentShopTab = 'pets';
   document.getElementById('shopCoins').textContent = coins;
-  document.getElementById('shopMain').style.display = 'block';
-  document.getElementById('shopPets').style.display = 'none';
-  document.getElementById('shopFrames').style.display = 'none';
-  updateShopMain();
+  document.getElementById('tabPets').classList.add('active');
+  document.getElementById('tabFrames').classList.remove('active');
+  renderShopGrid();
   document.getElementById('shopOverlay').classList.add('show');
   document.body.classList.add('modal-open');
 }
@@ -1175,9 +1094,9 @@ function buyOrSelect(id) {
       localStorage.setItem('mathOwnedPets', JSON.stringify(ownedPets));
       activePet = id;
       localStorage.setItem('mathActivePet', id);
-      renderPet(); 
+      renderPet();
       playSound('win');
-      renderShopPets2(); updateShopMain();
+      renderShopGrid();
     } else {
       alert(`Нужно ещё ${pet.price - coins} монет! 🪙`);
     }

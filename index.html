@@ -136,11 +136,36 @@ h1 {
 .mode-btn.minus { background: var(--primary); }
 .mode-btn.mult  { background: var(--purple); }
 .mode-btn.div   { background: var(--orange); }
+.mode-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mode-col .mode-btn {
+  font-size: 1.6rem;
+  padding: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+}
+
 
 /* GAME AREA */
 .game-area {
-  display: flex; gap: 16px; align-items: flex-start;
-  width: 100%; max-width: 820px; z-index: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  z-index: 1;
 }
 
 /* PET */
@@ -388,12 +413,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   <button class="lv-btn" onclick="setLevel(3)">⭐⭐⭐ Уровень 3</button>
 </div>
 
-<div class="mode-selector">
-  <button class="mode-btn plus active" onclick="setMode('plus')">➕ Плюс</button>
-  <button class="mode-btn minus" onclick="setMode('minus')">➖ Минус</button>
-  <button class="mode-btn mult" onclick="setMode('mult')">✖️ Умножение</button>
-  <button class="mode-btn div" onclick="setMode('div')">➗ Деление</button>
-</div>
+
 
 <div class="game-area">
   <!-- PET -->
@@ -415,6 +435,14 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
     <div class="answers" id="answers"></div>
     <div class="feedback" id="feedback"></div>
     <div class="streak" id="streak"></div>
+  </div>
+
+  <!-- MODE BUTTONS -->
+  <div class="mode-col">
+    <button class="mode-btn plus active" onclick="setMode('plus')">➕</button>
+    <button class="mode-btn minus" onclick="setMode('minus')">➖</button>
+    <button class="mode-btn mult" onclick="setMode('mult')">✖️</button>
+    <button class="mode-btn div" onclick="setMode('div')">➗</button>
   </div>
 
   <!-- BONUS CARD -->

@@ -488,11 +488,62 @@ let questionsAnswered = 0;
 
 // ==================== DATA ====================
 const PETS = [
-  { id: 'cat',   emoji: '🐱', name: 'Мурзик',  price: 0,   speeches: { idle: ['Привет! Поехали!','Ты умный!','Я верю в тебя!'], happy: ['Молодец!','Ура!','Супер!'], sad: ['Не грусти...','Попробуй ещё!','Ты сможешь!'] } },
-  { id: 'dino',  emoji: '🦕', name: 'Динозик', price: 50,  speeches: { idle: ['Рычи на числа!','ГРАРРР!','Ты сильный!'], happy: ['ГРАРРР победа!','Ура рёв!','Дино доволен!'], sad: ['Упс...','Динозик грустит','Не сдавайся!'] } },
-  { id: 'fox',   emoji: '🦊', name: 'Рыжик',   price: 80,  speeches: { idle: ['Хитрее числа!','Думай хитро!','Ты лис!'], happy: ['Хитро сделал!','Умная лиса!','Топ!'], sad: ['Лис думает...','Хм...','Ещё раз!'] } },
-  { id: 'robot', emoji: '🤖', name: 'Роботик', price: 120, speeches: { idle: ['Вычисляю...','Загружаю задачу','Готов!'], happy: ['Правильно 100%!','Отличный код!','✓ Верно!'], sad: ['Ошибка!','Перезагружаю','Попытка снова'] } },
-  { id: 'dragon',emoji: '🐲', name: 'Дракоша', price: 200, speeches: { idle: ['Огнём решим!','Дракон готов!','Летим!'], happy: ['Огонь!🔥','Дракон рад!','Победа!'], sad: ['Дракон вздыхает','Огонь угас...','Снова!'] } },
+  // --- БЕСПЛАТНЫЕ ---
+  { id: 'cat',      emoji: '🐱', name: 'Мурзик',      price: 0,   sad: '😿', happy: '😸' },
+  // --- МАЙНКРАФТ ---
+  { id: 'creeper',  emoji: '💚', name: 'Крипер',       price: 30,  sad: '😰', happy: '😎' },
+  { id: 'steve',    emoji: '⛏️', name: 'Стив',         price: 30,  sad: '😟', happy: '💪' },
+  { id: 'pig_mc',   emoji: '🐷', name: 'Хрюша МС',    price: 40,  sad: '😿', happy: '🐷' },
+  { id: 'sheep',    emoji: '🐑', name: 'Овечка',       price: 40,  sad: '😔', happy: '🥳' },
+  { id: 'wolf_mc',  emoji: '🐺', name: 'Волк МС',      price: 50,  sad: '🐺', happy: '🐺' },
+  { id: 'enderman', emoji: '🟣', name: 'Эндермен',     price: 60,  sad: '😡', happy: '😏' },
+  { id: 'ghast',    emoji: '👻', name: 'Гаст',         price: 60,  sad: '😭', happy: '😲' },
+  { id: 'axolotl',  emoji: '🦎', name: 'Аксолотль',   price: 50,  sad: '😢', happy: '🥰' },
+  { id: 'panda',    emoji: '🐼', name: 'Панда МС',     price: 50,  sad: '😿', happy: '🐼' },
+  { id: 'frog_mc',  emoji: '🐸', name: 'Лягушка МС',  price: 40,  sad: '😞', happy: '🎉' },
+  // --- ПОПУЛЯРНЫЕ ИГРЫ ---
+  { id: 'pikachu',  emoji: '⚡', name: 'Пикачу',       price: 80,  sad: '😿', happy: '⚡' },
+  { id: 'kirby',    emoji: '🌸', name: 'Кирби',        price: 70,  sad: '😢', happy: '🌸' },
+  { id: 'yoshi',    emoji: '🦎', name: 'Йоши',         price: 70,  sad: '😔', happy: '🥚' },
+  { id: 'mario',    emoji: '🍄', name: 'Марио',        price: 80,  sad: '😟', happy: '🌟' },
+  { id: 'luigi',    emoji: '💚', name: 'Луиджи',       price: 80,  sad: '😨', happy: '🎉' },
+  { id: 'link',     emoji: '🗡️', name: 'Линк',         price: 90,  sad: '😔', happy: '⚔️' },
+  { id: 'sonic',    emoji: '💙', name: 'Соник',        price: 80,  sad: '😓', happy: '💨' },
+  { id: 'tails',    emoji: '🦊', name: 'Тейлз',        price: 70,  sad: '😢', happy: '✈️' },
+  { id: 'among_red',emoji: '🔴', name: 'Красный (Among Us)', price: 60, sad: '😳', happy: '✅' },
+  { id: 'among_bl', emoji: '🔵', name: 'Синий (Among Us)',   price: 60, sad: '😱', happy: '🎉' },
+  { id: 'dogecoin', emoji: '🐕', name: 'Doge',         price: 50,  sad: '😢', happy: '🚀' },
+  { id: 'slime',    emoji: '🟢', name: 'Слайм',        price: 40,  sad: '😔', happy: '😁' },
+  { id: 'chomper',  emoji: '🌻', name: 'Чомпер PvZ',   price: 50,  sad: '🥀', happy: '🌻' },
+  { id: 'sunflower',emoji: '🌼', name: 'Подсолнух PvZ',price: 50,  sad: '🥀', happy: '☀️' },
+  { id: 'angry_red',emoji: '🐦', name: 'Angry Birds',  price: 60,  sad: '😤', happy: '💥' },
+  { id: 'roblox',   emoji: '🟥', name: 'Роблокс',      price: 70,  sad: '😟', happy: '🎮' },
+  { id: 'fnaf',     emoji: '🐻', name: 'Фредди',       price: 90,  sad: '😨', happy: '🎸' },
+  { id: 'stitch',   emoji: '💙', name: 'Стич',         price: 80,  sad: '😢', happy: '🤙' },
+  { id: 'toothless',emoji: '🖤', name: 'Беззубик',     price: 100, sad: '😿', happy: '🔥' },
+  // --- МУЛЬТИКИ ---
+  { id: 'pirate',   emoji: '🏴‍☠️', name: 'Пиратик',     price: 60,  sad: '😔', happy: '⚓' },
+  { id: 'nemo',     emoji: '🐠', name: 'Немо',         price: 60,  sad: '😢', happy: '🌊' },
+  { id: 'simba',    emoji: '🦁', name: 'Симба',        price: 80,  sad: '😿', happy: '👑' },
+  { id: 'dumbo',    emoji: '🐘', name: 'Думбо',        price: 70,  sad: '😢', happy: '🪶' },
+  { id: 'bambi',    emoji: '🦌', name: 'Бэмби',        price: 60,  sad: '😔', happy: '🌿' },
+  { id: 'goofy',    emoji: '🐶', name: 'Гуфи',         price: 70,  sad: '😅', happy: '🤪' },
+  { id: 'chip',     emoji: '🐿️', name: 'Чип',          price: 60,  sad: '😟', happy: '🔧' },
+  { id: 'dale',     emoji: '🐿️', name: 'Дейл',         price: 60,  sad: '😢', happy: '🍫' },
+  { id: 'winnie',   emoji: '🍯', name: 'Винни-Пух',    price: 60,  sad: '😟', happy: '🍯' },
+  { id: 'piglet',   emoji: '🐷', name: 'Пятачок',      price: 50,  sad: '😰', happy: '🎈' },
+  { id: 'panda2',   emoji: '🐼', name: 'Кунг-фу Панда',price: 80,  sad: '😢', happy: '🥋' },
+  { id: 'shrek',    emoji: '🟢', name: 'Шрек',         price: 90,  sad: '😤', happy: '🧅' },
+  { id: 'donkey',   emoji: '🐴', name: 'Осёл (Шрек)',  price: 70,  sad: '😔', happy: '🎤' },
+  { id: 'sponge',   emoji: '🧽', name: 'Губка Боб',    price: 80,  sad: '😭', happy: '🍔' },
+  { id: 'patrick',  emoji: '⭐', name: 'Патрик',       price: 70,  sad: '😴', happy: '🤩' },
+  // --- ДИНОЗАВРЫ И ЖИВОТНЫЕ ---
+  { id: 'trex',     emoji: '🦖', name: 'Ти-Рекс',      price: 80,  sad: '😔', happy: '🦖' },
+  { id: 'dino2',    emoji: '🦕', name: 'Динозик',      price: 50,  sad: '😔', happy: '🦕' },
+  { id: 'unicorn',  emoji: '🦄', name: 'Единорог',     price: 100, sad: '😢', happy: '🌈' },
+  { id: 'dragon2',  emoji: '🐲', name: 'Дракоша',      price: 120, sad: '😤', happy: '🔥' },
+  { id: 'robot',    emoji: '🤖', name: 'Роботик',      price: 90,  sad: '⚠️', happy: '✅' },
+  { id: 'alien',    emoji: '👾', name: 'Пришелец',     price: 110, sad: '😟', happy: '🛸' },
 ];
 
 const LEVELS = {
@@ -581,11 +632,8 @@ function petAnim(type) {
   el.classList.remove('happy','sad','bounce');
   void el.offsetWidth;
   el.classList.add(type);
-  // Swap emoji to sad/happy face
-  const SAD_PETS  = { cat:'😿', dino:'🦕', fox:'🦊', robot:'🤖', dragon:'🐲' };
-  const HAPPY_PETS= { cat:'😸', dino:'🦕', fox:'🦊', robot:'🤖', dragon:'🐲' };
-  if (type === 'sad')   { el.textContent = SAD_PETS[p.id]  || p.emoji; }
-  if (type === 'happy') { el.textContent = HAPPY_PETS[p.id] || p.emoji; }
+  if (type === 'sad')   el.textContent = p.sad   || p.emoji;
+  if (type === 'happy') el.textContent = p.happy || p.emoji;
   const dur = type === 'sad' ? 1200 : 700;
   setTimeout(() => { el.classList.remove(type); el.textContent = p.emoji; }, dur);
 }
@@ -919,6 +967,8 @@ function openShop() {
       <div class="shop-item-price">${active ? '✓ Выбран' : owned ? '✓ Есть' : '🪙 '+p.price}</div>
     </div>`;
   }).join('');
+  grid.style.maxHeight = '55vh';
+  grid.style.overflowY = 'auto';
   document.getElementById('shopOverlay').classList.add('show');
 }
 

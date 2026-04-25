@@ -908,8 +908,8 @@ function checkAnswer(val, btn) {
     playSound('correct');
     petAnim('happy'); 
 
-    // coins: +1, +2 on streak
-    const coinGain = streak >= 5 ? 2 : 1;
+    // coins: +1 normally, +2 on streak of 3+
+    const coinGain = streak >= 3 ? 2 : 1;
     const r = btn.getBoundingClientRect();
     addCoins(coinGain, r.left, r.top);
 

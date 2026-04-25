@@ -136,6 +136,8 @@ h1 {
 .mode-btn.minus { background: var(--primary); }
 .mode-btn.mult  { background: var(--purple); }
 .mode-btn.div   { background: var(--orange); }
+  .mode-btn.cmp   { background: #00b894; }
+  .mode-btn.rnd   { background: #e17055; }
 .mode-col {
   display: flex;
   flex-direction: column;
@@ -461,7 +463,7 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
   <div class="coin-display">🪙 <span id="coinCount">0</span></div>
   <button class="icon-btn shop" onclick="openShop()">🛍️ Магазин</button>
   <button class="icon-btn record" onclick="openRecords()">🏆 Рекорды</button>
-  <button class="icon-btn" onclick="resetGame()" style="background:var(--accent);">🔄</button>
+  <button class="icon-btn" onclick="resetGame()" style="background:var(--secondary);color:#333;box-shadow:0 4px 0 #e6c200;">🔄</button>
 </div>
 
 <div class="progress-wrap">
@@ -510,6 +512,8 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
     <button class="mode-btn minus" onclick="setMode('minus')">➖</button>
     <button class="mode-btn mult" onclick="setMode('mult')">✖️</button>
     <button class="mode-btn div" onclick="setMode('div')">➗</button>
+    <button class="mode-btn cmp" onclick="setMode('cmp')">⚖️</button>
+    <button class="mode-btn rnd" onclick="setMode('rnd')">🎲</button>
   </div>
 
   <!-- BONUS CARD -->
@@ -786,7 +790,7 @@ function setLevel(n) {
 function setMode(m) {
   mode = m;
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  const cls = {plus:'plus',minus:'minus',mult:'mult',div:'div'}[m];
+  const cls = {plus:'plus',minus:'minus',mult:'mult',div:'div',cmp:'cmp',rnd:'rnd'}[m];
   document.querySelector('.mode-btn.' + cls).classList.add('active');
   generateQuestion();
 applyFrame();
@@ -849,24 +853,43 @@ function generateQuestion() {
   document.getElementById('question').textContent = display;
   document.getElementById('question').classList.remove('shake');
 
-  const options = new Set([answer]);
-  let att = 0;
-  while (options.size < 4 && att++ < 300) {
-    let off = rand(1, Math.max(4, Math.floor(answer * 0.25) + 3));
-    let fake = Math.random() < 0.5 ? answer + off : answer - off;
-    if (fake >= 0 && fake !== answer) options.add(fake);
-  }
-  const arr = [...options].sort(() => Math.random() - 0.5);
-
   const container = document.getElementById('answers');
   container.innerHTML = '';
-  arr.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'ans-btn';
-    btn.textContent = opt;
-    btn.onclick = () => checkAnswer(opt, btn);
-    container.appendChild(btn);
-  });
+
+  // Random mode picks a different mode each question
+  const actualMode = mode === 'rnd'
+    ? ['plus','minus','mult','div','cmp'][rand(0,4)]
+    : mode;
+
+  if (actualMode === 'cmp') {
+    // Show only 3 big buttons: < = >
+    container.style.gridTemplateColumns = '1fr 1fr 1fr';
+    ['<', '=', '>'].forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'ans-btn';
+      btn.style.fontSize = '2.5rem';
+      btn.textContent = opt;
+      btn.onclick = () => checkAnswer(opt, btn);
+      container.appendChild(btn);
+    });
+  } else {
+    container.style.gridTemplateColumns = '1fr 1fr';
+    const options = new Set([answer]);
+    let att = 0;
+    while (options.size < 4 && att++ < 300) {
+      let off = rand(1, Math.max(4, Math.floor(answer * 0.25) + 3));
+      let fake = Math.random() < 0.5 ? answer + off : answer - off;
+      if (fake >= 0 && fake !== answer) options.add(fake);
+    }
+    const arr = [...options].sort(() => Math.random() - 0.5);
+    arr.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'ans-btn';
+      btn.textContent = opt;
+      btn.onclick = () => checkAnswer(opt, btn);
+      container.appendChild(btn);
+    });
+  }
 
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
@@ -876,7 +899,7 @@ function checkAnswer(val, btn) {
   if (!canAnswer) return;
   canAnswer = false;
 
-  if (val === answer) {
+  if (String(val) === String(answer)) {
     correct++; streak++; winCount++; totalCorrect++; questionsAnswered++;
     btn.classList.add('correct');
     document.getElementById('scoreCorrect').textContent = correct;

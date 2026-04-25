@@ -488,16 +488,16 @@ footer { margin-top: 20px; color: #ccc; font-size: 0.8rem; z-index: 1; }
 
 <!-- SHOP OVERLAY -->
 <div class="overlay" id="shopOverlay">
-  <div class="overlay-box" style="max-width:560px;width:92vw;max-height:85vh;overflow-y:auto;">
+  <div class="overlay-box" style="max-width:860px;width:95vw;max-height:90vh;padding:28px 32px;position:relative;">
+    <button onclick="closeOverlay('shopOverlay')" style="position:absolute;top:14px;left:14px;font-size:1.3rem;width:36px;height:36px;border:none;border-radius:50%;background:#f0f0f0;cursor:pointer;color:#666;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;">✕</button>
     <span class="overlay-emoji">🛍️</span>
     <div class="overlay-title" style="color:var(--purple)">Магазин</div>
     <div class="overlay-sub">🪙 У тебя: <span id="shopCoins">0</span> монет</div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px;">
-      <button class="shop-tab active" id="tabPets" onclick="switchTab('pets')">🐾 Питомцы</button>
-      <button class="shop-tab" id="tabFrames" onclick="switchTab('frames')">🖼️ Рамки</button>
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:20px;">
+      <button class="lv-btn active" id="tabPets" onclick="switchTab('pets')">🐾 Питомцы</button>
+      <button class="lv-btn" id="tabFrames" onclick="switchTab('frames')">🖼️ Рамки</button>
     </div>
-    <div id="shopGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;"></div>
-    <button class="overlay-btn purple" onclick="closeOverlay('shopOverlay')">Закрыть</button>
+    <div id="shopGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;max-height:58vh;overflow-y:auto;padding:4px;"></div>
   </div>
 </div>
 
@@ -1038,6 +1038,8 @@ function switchTab(tab) {
   currentShopTab = tab;
   document.getElementById('tabPets').classList.toggle('active', tab === 'pets');
   document.getElementById('tabFrames').classList.toggle('active', tab === 'frames');
+  document.getElementById('tabPets').classList.toggle('lv-btn', true);
+  document.getElementById('tabFrames').classList.toggle('lv-btn', true);
   renderShopGrid();
 }
 
